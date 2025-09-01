@@ -1,6 +1,6 @@
 import pandas as pd
 import sqlalchemy as sa
-from conexionBD import get_engine
+from backend.conexionBD import get_engine
 
 # 1. Leer el CSV
 df = pd.read_csv("Datasets/uber booking.csv")
