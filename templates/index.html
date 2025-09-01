@@ -1,0 +1,26 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de BI</title>
+    <style>
+     body { font-family: Arial; padding: 20px; }
+     .table { border-collapse: collapse; width: 100%; }
+     .table td, .table th { border: 1px solid #ddd; padding: 8px; }
+     .table th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Conteo de tipos de datos </h1>
+    <img src="{{ url_for('static', filename='images/tipos_datos.png') }}" alt="Gráfico tipos de datos">
+
+    <hr>
+
+    <h1>Dashboard - Valores Nulos</h1>
+    <img src="{{ url_for('static', filename='images/valores_nulos.png') }}" alt="Gráfico">
+
+</body>
+</html>
+
