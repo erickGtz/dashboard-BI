@@ -1,4 +1,3 @@
-import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 from ..conexionBD import get_engine
