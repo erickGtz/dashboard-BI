@@ -1,38 +1,20 @@
-# connect_mysql_connector.py
-import mysql.connector as mysql
 import pandas as pd
-from mysql.connector import errorcode
+import sqlalchemy as sa
+from conexionBD import get_engine
 
-'''
-cfg = dict(
-    host="localhost",
-    port=3306,
-    user="root",
-    password="",
-    database="econautica",
-)
+# 1. Leer el CSV
+df = pd.read_csv("Datasets/uber booking.csv")
 
-try:
-    cnx = mysql.connect(**cfg)
-    cur = cnx.cursor(dictionary=True)
-    cur.execute("SELECT * FROM usuarios;")
-    for fila in cur.fetchall():
-      print(fila["id"], fila["nombre"])
-    cur.close()
-    cnx.close()
-except mysql.Error as e:
-    if e.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Usuario o contraseña incorrectos")
-    elif e.errno == errorcode.ER_BAD_DB_ERROR:
-        print("La base de datos no existe")
-    else:
-        print("Error:", e)
+# 2. Obtener el engine
+engine = get_engine()
 
-'''
+# 3. Subir el DataFrame a la base de datos como tabla nueva
+df.to_sql("uber_booking", con=engine, if_exists="replace", index=False)
 
-# Carga tu archivo CSV
-df = pd.read_csv('Datasets/uber booking.csv')
+print("Datos subidos a la tabla 'uber_booking'")
 
-# Verifica que se cargó bien
-print(df.head())
-print(df.columns)
+# 4. Consultar algunos registros para verificar
+with engine.connect() as conn:
+    result = conn.execute(sa.text("SELECT * FROM uber_booking LIMIT 5"))
+    for fila in result:
+        print(fila)
