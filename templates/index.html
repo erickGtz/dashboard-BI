@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
     <head>
         <meta charset="UTF-8">
         <title>Dashboard de BI</title>
@@ -53,20 +54,22 @@
         <div class="container_barra">
             <!-- Cuadro para cargar el archivo Excel -->
             <div class="box">
-                <button onclick="document.getElementById('file-upload').click()">Cargar Excel</button>
-                <input type="file" id="file-upload" style="display: none;" accept=".xlsx, .xls, .csv">
+                <button class="btn-upload" onclick="document.getElementById('file-upload').click()">Cargar
+                    Excel</button>
+                <input type="file" id="file-upload" style="display: none;" accept=".xlsx, .xls, .csv"
+                       onchange="uploadFile()">
             </div>
 
             <!-- Cuadro para mostrar número de variables -->
             <div class="box">
                 <h3>Variables encontradas</h3>
-                <p id="num-variables">0</p>  <!-- Este valor cambiará dinámicamente -->
+                <p id="num-variables">0</p>
             </div>
 
             <!-- Cuadro para mostrar total de observaciones -->
             <div class="box">
                 <h3>Total de observaciones</h3>
-                <p id="total-observaciones">0</p>  <!-- Este valor cambiará dinámicamente -->
+                <p id="total-observaciones">0</p>
             </div>
         </div>
 
@@ -153,7 +156,8 @@
 
     </body>
 
-    <script src="{{ url_for('js', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cargar_excel.js') }}"></script>
+
 
 
 </html>
