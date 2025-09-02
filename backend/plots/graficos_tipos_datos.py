@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns 
 import numpy as np 
-from ..conexionBD import get_engine
+from ..DB_singleton import DatabaseSingleton
 import os
 
 def grafico_tipos_datos(output_path="static/images/tipos_datos.png"):
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
-
+    
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
+    
     tipo_datos = df.dtypes.value_counts()
     tipo_datos.plot(kind='bar', color='mediumseagreen')
     
@@ -30,8 +31,9 @@ def grafico_tipos_datos(output_path="static/images/tipos_datos.png"):
 
 
 def grafico_por_columna(output_dir="static/images/graficos_por_columna/"):
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
+    
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
 
     
     for columna in df.columns:
