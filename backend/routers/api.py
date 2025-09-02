@@ -8,6 +8,7 @@ api = Blueprint("api", __name__)
 
 @api.route("/")
 def view():
+    grafico_valores_unicos()
     grafico_valores_nulos()
     grafico_tipos_datos()
     grafico_por_columna()
