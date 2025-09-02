@@ -2,25 +2,117 @@
 
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard de BI</title>
-    <style>
-     body { font-family: Arial; padding: 20px; }
-     .table { border-collapse: collapse; width: 100%; }
-     .table td, .table th { border: 1px solid #ddd; padding: 8px; }
-     .table th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-    <h1>Conteo de tipos de datos </h1>
-    <img src="{{ url_for('static', filename='images/tipos_datos.png') }}" alt="Gráfico tipos de datos">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Dashboard de BI</title>
+        <style>
+            body {
+                font-family: Arial;
+                padding: 20px;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                /* 3 columnas */
+                gap: 20px;
+            }
+
+            .grid-container img {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Conteo de tipos de datos </h1>
+        <img src="{{ url_for('static', filename='images/tipos_datos.png') }}" alt="Gráfico tipos de datos">
+
+        <hr>
+
+        <h1>Dashboard - Valores Nulos</h1>
+        <img src="{{ url_for('static', filename='images/valores_nulos.png') }}" alt="Gráfico">
+
+        <hr>
+
+        <!-- Gráficos de tipo numérico -->
+        <h2>Gráficos Numéricos</h2>
+        <div class="grid-container">
+            {% for filename in numericas %}
+            <div>
+                <h2>{{ filename.split('.')[0] }}</h2>
+                <img src="{{ url_for('static', filename='images/graficos_por_columna/' + filename) }}"
+                     alt="{{ filename }}">
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <hr>
+
+        <!-- Gráficos categóricos -->
+        <h2>Gráficos Categóricos (Pocas categorías)</h2>
+        <div class="grid-container">
+            {% for filename in categoricas %}
+            <div>
+                <h2>{{ filename.split('.')[0] }}</h2>
+                <img src="{{ url_for('static', filename='images/graficos_por_columna/' + filename) }}"
+                     alt="{{ filename }}">
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <!-- Gráficos categóricos con muchas categorías -->
+        <h2>Gráficos Categóricos (Muchas categorías)</h2>
+        <div class="grid-container">
+            {% for filename in categoricas_muchas %}
+            <div>
+                <h2>{{ filename.split('.')[0] }}</h2>
+                <img src="{{ url_for('static', filename='images/graficos_por_columna/' + filename) }}"
+                     alt="{{ filename }}">
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <!-- Gráficos booleanos -->
+        <h2>Gráficos Booleanos</h2>
+        <div class="grid-container">
+            {% for filename in booleanos %}
+            <div>
+                <h2>{{ filename.split('.')[0] }}</h2>
+                <img src="{{ url_for('static', filename='images/graficos_por_columna/' + filename) }}"
+                     alt="{{ filename }}">
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <!-- Gráficos de fechas -->
+        <h2>Gráficos de Fechas</h2>
+        <div class="grid-container">
+            {% for filename in fechas %}
+            <div>
+                <h2>{{ filename.split('.')[0] }}</h2>
+                <img src="{{ url_for('static', filename='images/graficos_por_columna/' + filename) }}"
+                     alt="{{ filename }}">
+            </div>
+            {% endfor %}
+        </div>
+
 
     <hr>
 
-    <h1>Dashboard - Valores Nulos</h1>
-    <img src="{{ url_for('static', filename='images/valores_nulos.png') }}" alt="Gráfico">
+    <h1>Dashboard - Valores Unicos</h1>
+    <img src="{{ url_for('static', filename='images/valores_unicos.png') }}" alt="Gráfico tipos unicos">
 
 </body>
 </html>
-
