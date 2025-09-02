@@ -3,11 +3,9 @@ import pandas as pd
 from ..conexionBD import get_engine
 
 def grafico_valores_unicos(output_path="static/images/valores_unicos.png"):
-    # Conexión a la base de datos y carga del dataset
     engine = get_engine()
     df = pd.read_sql("SELECT * FROM uber_booking", engine)
 
-    # Calcular valores únicos
     valores_unicos = df.nunique()  # Cuenta los valores únicos por columna
     total = df.shape[0]  # Total de registros
 
@@ -25,11 +23,10 @@ def grafico_valores_unicos(output_path="static/images/valores_unicos.png"):
     plt.title('Porcentaje de valores únicos por columna')
     plt.grid(axis='x', linestyle='--', alpha=0.5)
 
-    # Etiquetas en cada barra
     for index, columna in enumerate(valores_unicos_filtrados.index):
         porcentaje = valores_unicos_filtrados[columna]
         cantidad = df[columna].nunique()  # Cantidad de valores únicos
-        plt.text(porcentaje + 0.5, index, f'{porcentaje}% ({cantidad} valores únicos)', va='center', fontsize=9)
+        plt.text(porcentaje + 0.5, index, f'{porcentaje}% ({cantidad} valores)', va='center', fontsize=9)
 
     plt.tight_layout()
     plt.savefig(output_path)

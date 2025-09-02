@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 from ..plots.graficos_tipos_datos import grafico_tipos_datos, grafico_por_columna
 from ..plots.graficos_nulos import grafico_valores_nulos
+from ..plots.graficos_unicos import grafico_valores_unicos
 import os 
 
 api = Blueprint("api", __name__)

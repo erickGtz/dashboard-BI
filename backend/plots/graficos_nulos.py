@@ -31,7 +31,7 @@ def grafico_valores_nulos(output_path="static/images/valores_nulos.png"):
     for index, columna in enumerate(nulos_filtrados.index):
       porcentaje = nulos_filtrados[columna]
       cantidad = nulos_absolutos[columna]
-      plt.text(porcentaje + 0.5, index, f'{porcentaje}% ({cantidad})', va='center', fontsize=9)
+      plt.text(porcentaje + 0.5, index, f'{porcentaje}% ({cantidad} valores)', va='center', fontsize=9)
 
     plt.tight_layout()
     plt.savefig(output_path)
