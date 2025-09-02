@@ -1,2 +1,5 @@
 __pycache__/
-static/images/
+static/images/graficos_por_columna/*
+!static/images/graficos_por_columna/.gitkeep
+static/images/*.png
+!static/images/.gitkeep
