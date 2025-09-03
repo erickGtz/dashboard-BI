@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns 
 import numpy as np 
-from ..conexionBD import get_engine
+from ..DB_singleton import DatabaseSingleton
 import os
 
 def grafico_tipos_datos(output_path="static/images/tipos_datos.png"):
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
-
+    
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
+    
     tipo_datos = df.dtypes.value_counts()
     tipo_datos.plot(kind='bar', color='mediumseagreen')
     
@@ -30,29 +31,36 @@ def grafico_tipos_datos(output_path="static/images/tipos_datos.png"):
 
 
 def grafico_por_columna(output_dir="static/images/graficos_por_columna/"):
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
-
     
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
+
+    # Inicializamos las listas para las categorías
+    numericas = []
+    categoricas = []
+    categoricas_muchas = []
+    booleanos = []
+    fechas = []
+
+    # Iterar sobre las columnas
     for columna in df.columns:
         serie = df[columna]
         tipo_dato = serie.dtypes
 
-        output_path = os.path.join(output_dir, f"{columna}_{tipo_dato}.png")
+        output_path = os.path.join(output_dir, f"{columna}.png")
 
         # 1. Si es numérico
-        if np.issubdtype(tipo_dato, np.number):
-            output_path = os.path.join(output_dir, f"{columna}_Boxplot.png")
+        if pd.api.types.is_numeric_dtype(serie):
             plt.figure(figsize=(8, 6))
             sns.boxplot(x=serie, color='lightblue')
             plt.title(f"Boxplot - {columna}")
             plt.tight_layout()
             plt.savefig(output_path)
             plt.close()
+            numericas.append(f"{columna}.png")
 
         # 2. Si es categórico con pocas categorías
         elif tipo_dato == 'object' and serie.nunique() <= 7:
-            output_path = os.path.join(output_dir, f"{columna}_Frecuencia.png")
             plt.figure(figsize=(8, 6))
             serie.value_counts().plot(kind='bar', color='lightcoral')
             plt.title(f"Frecuencia de valores - {columna}")
@@ -61,11 +69,10 @@ def grafico_por_columna(output_dir="static/images/graficos_por_columna/"):
             plt.tight_layout()
             plt.savefig(output_path)
             plt.close()
+            categoricas.append(f"{columna}.png")
 
         # 3. Si es categórico con muchas categorías
         elif tipo_dato == 'object' and serie.nunique() > 7:
-            output_path = os.path.join(output_dir, f"{columna}_TopN.png")
-            # Tomamos las N principales categorías y agrupamos el resto como "Otros"
             top_n = serie.value_counts().nlargest(10)
             otros = serie.value_counts().iloc[10:].sum()
             top_n["Otros"] = otros
@@ -78,10 +85,10 @@ def grafico_por_columna(output_dir="static/images/graficos_por_columna/"):
             plt.tight_layout()
             plt.savefig(output_path)
             plt.close()
+            categoricas_muchas.append(f"{columna}.png")
 
         # 4. Si es booleano
         elif tipo_dato == 'bool':
-            output_path = os.path.join(output_dir, f"{columna}_TrueFalse.png")
             plt.figure(figsize=(8, 6))
             serie.value_counts().plot(kind='bar', color=['blue', 'orange'])
             plt.title(f"Conteo de True/False - {columna}")
@@ -90,11 +97,10 @@ def grafico_por_columna(output_dir="static/images/graficos_por_columna/"):
             plt.tight_layout()
             plt.savefig(output_path)
             plt.close()
+            booleanos.append(f"{columna}.png")
 
         # 5. Si es fecha (datetime)
-        elif np.issubdtype(tipo_dato, np.datetime64):
-            output_path = os.path.join(output_dir, f"{columna}_Fecha.png")
-            # Resample por día, mes y año
+        elif pd.api.types.is_datetime64_any_dtype(serie):
             plt.figure(figsize=(8, 6))
             serie_resampled_day = serie.resample('D').count()  # Conteo diario
             serie_resampled_month = serie.resample('M').count()  # Conteo mensual
@@ -113,3 +119,7 @@ def grafico_por_columna(output_dir="static/images/graficos_por_columna/"):
             plt.tight_layout()
             plt.savefig(output_path)
             plt.close()
+            fechas.append(f"{columna}.png")
+
+    # Retornar las listas de gráficos generados
+    return numericas, categoricas, categoricas_muchas, booleanos, fechas

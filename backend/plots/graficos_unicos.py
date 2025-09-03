@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from ..conexionBD import get_engine
+from ..DB_singleton import DatabaseSingleton
 
 def grafico_valores_unicos(output_path="static/images/valores_unicos.png"):
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
 
     valores_unicos = df.nunique()  # Cuenta los valores únicos por columna
     total = df.shape[0]  # Total de registros
