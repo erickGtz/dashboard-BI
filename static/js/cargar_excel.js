@@ -12,6 +12,9 @@ function uploadFile() {
     .then(data => {
       console.log(data);  // Log para ver la respuesta del servidor
       alert("¡Archivo cargado exitosamente!");
+
+      window.location.reload(); //recarga la página
+      
     })
     .catch(error => console.error('Error al cargar el archivo:', error));
   }
