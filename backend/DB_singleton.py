@@ -14,12 +14,24 @@ class DatabaseSingleton:
     def obtener_datos(self):
         """Obtiene los datos de la base de datos, pero solo una vez."""
         # Si los datos no han sido cargados previamente
-        if self._df is None:
-            engine = get_engine()  # Conectar a la base de datos
-            # Consulta real a la tabla 'uber_booking'
-            query = """
-                SELECT * 
-                FROM uber_booking
-            """
-            self._df = pd.read_sql(query, engine)  # Ejecuta el SELECT y carga los datos
-        return self._df  # Retorna el DataFrame cargado
+        if self._df is None or self._df.empty:
+            self._df = self._cargar_datos()
+        return self._df
+    
+    def recargar_datos(self):
+        """Recarga los datos del dataset después de un cambio (por ejemplo, después de cargar un nuevo Excel)."""
+        self._df = None  # Limpiamos el cache
+        return self.obtener_datos()
+
+    @staticmethod
+    def _cargar_datos():
+        """Carga los datos de la base de datos."""
+        engine = get_engine()
+        query = "SELECT * FROM dataset"  # nombre de la tabla creada
+        df = pd.read_sql(query, engine)
+        
+        # Verificamos si el DataFrame está vacío
+        if df is None or df.empty:
+            raise ValueError("No se han encontrado datos en la base de datos.")
+        
+        return df
