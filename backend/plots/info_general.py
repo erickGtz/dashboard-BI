@@ -1,9 +1,9 @@
 import pandas as pd
-from ..conexionBD import get_engine
+from ..DB_singleton import DatabaseSingleton
 
 def mostrar_info_general():
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
 
     # Obtener el número de observaciones (filas) y variables (columnas)
     num_observaciones = df.shape[0]  # Número de filas
