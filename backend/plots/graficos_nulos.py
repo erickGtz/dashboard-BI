@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from ..conexionBD import get_engine
+from ..DB_singleton import DatabaseSingleton
 
 def grafico_valores_nulos(output_path="static/images/valores_nulos.png"):
-    engine = get_engine()
-    df = pd.read_sql("SELECT * FROM uber_booking", engine)
+    db = DatabaseSingleton()
+    df = db.obtener_datos()
 
   # Calcular nulos
     nulos = df.isnull().sum()
